@@ -9,16 +9,20 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="./styles.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Admin Dashboard</title>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-           
+          
+           <div class="col-6">
             <a href="admindashboard.php"><button type="button" class="btn btn-primary" style="margin-top:10px;margin-left:10px;margin-bottom:10px;">Back to Dashboard</button></a>
-
+            </div>
+            <div class="col-6">
+            <!-- <a href="#"><button type="button" class="btn btn-primary" style="margin-top:10px;margin-left:10px;margin-bottom:10px;float:right;">Download as Excel</button></a> -->
+            </div>
             <main role="main" class=" px-4">
 <center> <h3>Guide Allotment Details</h3> </center>
                 <hr>
@@ -93,22 +97,7 @@ tr:nth-child(even) {
 }
 
 </style>
-<table>
 
-  <tr>
-    <th>Domain</th>
-   
-    <th>Department</th>
-	<th>Year</th>
-	<th>Guide/Mentor</th>
-  <th>Roll No 1</th>
-	<th>Member 1 (Leader)</th>
-  <th>Roll No 2</th>
-	<th>Member 2</th>
-  <th>Roll No 3</th>
-	<th>Member 3</th>
-  <th>Roll No 4</th>
-	<th>Member 4</th>
   
 <?php
 $servername = "localhost";
@@ -179,35 +168,52 @@ if ( mysqli_num_rows($result) > 0  ) {
 	<th>Member 2</th>
 	<th>Member 3</th>
 	<th>Member 4</th> -->
-    
-<?php
 
-$i=0;
-while($row = mysqli_fetch_array($result)) {
-?>
-<tr>
-    <td><?php echo $row["domain_name"]; ?></td>
+  <form method="POST" id="convert_form" action="export.php">
+            <table class="table table-striped table-bordered" id="table_content">
+
+  <tr>
+    <th>Domain</th>
    
-    <td><?php echo $row["department_title"]; ?></td>
-	<td><?php echo $row["year_study"]; ?></td>
-    <td><?php echo $row["mentor_name"]; ?></td>
-    <td><?php echo $row["roll_no_1"]; ?> 
-	<td><?php echo $row["mem_1_lead"]; ?>
-  <td><?php echo $row["roll_no_2"]; ?> 
-    <td><?php echo $row["mem_2"]; ?> 
-    <td><?php echo $row["roll_no_3"]; ?> 
-    <td><?php echo $row["mem_3"]; ?> 
-    <td><?php echo $row["roll_no_4"]; ?> 
-    <td><?php echo $row["mem_4"]; ?> 
+    <th>Department</th>
+	<th>Year</th>
+	<th>Guide/Mentor</th>
+  <th>Roll No 1</th>
+	<th>Member 1 (Leader)</th>
+  <th>Roll No 2</th>
+	<th>Member 2</th>
+  <th>Roll No 3</th>
+	<th>Member 3</th>
+  <th>Roll No 4</th>
+	<th>Member 4</th>
     
-   
-</tr>
 <?php
-$i++;
-}
-echo "Total allotment entries are". "\t" . $i;
-?>
+    foreach($result as $row)
+    {
+      echo '
+      <tr>
+        <td>'.$row["domain_name"].'</td>
+        <td>'.$row["department_title"].'</td>
+        <td>'.$row["year_study"].'</td>
+        <td>'.$row["mentor_name"].'</td>
+        <td>'.$row["roll_no_1"].'</td>
+        <td>'.$row["mem_1_lead"].'</td>
+        <td>'.$row["roll_no_2"].'</td>
+        <td>'.$row["mem_2"].'</td>
+        <td>'.$row["roll_no_3"].'</td>
+        <td>'.$row["mem_3"].'</td>
+        <td>'.$row["roll_no_4"].'</td>
+        <td>'.$row["mem_4"].'</td>
+      </tr>
+      ';
+    }
+    ?>
+
+
 </table>
+<input type="hidden" name="file_content" id="file_content" />
+  <button type="button" name="convert" id="convert" class="btn btn-primary">Convert</button>
+</form>
  <?php
 }
 else{
@@ -215,5 +221,18 @@ else{
 }
 }
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
  </body>
 </html>
+
+<script>
+$(document).ready(function(){
+ $('#convert').click(function(){
+    var table_content = '<table>';
+    table_content += $('#table_content').html();
+    table_content += '</table>';
+    $('#file_content').val(table_content);
+    $('#convert_form').submit();
+  });
+});
+</script>
