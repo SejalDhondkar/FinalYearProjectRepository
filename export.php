@@ -19,7 +19,7 @@ if(isset($_POST["file_content"]))
  $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 ob_end_clean();
 
- $filename = time(). '.xlsx';
+ $filename = 'guide_allotment_'.time(). '.xlsx';
 
  
 
